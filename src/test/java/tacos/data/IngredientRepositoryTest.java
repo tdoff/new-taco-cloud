@@ -17,11 +17,11 @@ class IngredientRepositoryTest {
 
     @Test
     public void findOne() {
-        Optional<Ingredient> flto = ingredientRepo.findOne("FLTO");
+        Optional<Ingredient> flto = ingredientRepo.findById("FLTO");
         assertThat(flto.isPresent()).isTrue();
         assertThat(flto.get()).isEqualTo(new Ingredient("FLTO", "Flour Tortilla", Ingredient.Type.WRAP));
 
-        Optional<Ingredient> xxxx = ingredientRepo.findOne("XXXX");
+        Optional<Ingredient> xxxx = ingredientRepo.findById("XXXX");
         assertThat(xxxx.isEmpty()).isTrue();
 
     }

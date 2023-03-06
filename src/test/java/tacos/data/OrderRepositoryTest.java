@@ -46,7 +46,7 @@ class OrderRepositoryTest {
         TacoOrder savedOrder = orderRepo.save(order);
         assertThat(savedOrder.getId()).isNotNull();
 
-        TacoOrder fetchedOrder = orderRepo.findOne(savedOrder.getId()).get();
+        TacoOrder fetchedOrder = orderRepo.findById(savedOrder.getId()).get();
         assertThat(fetchedOrder.getDeliveryName()).isEqualTo("Test McTest");
         assertThat(fetchedOrder.getDeliveryStreet()).isEqualTo("1234 Test Lane");
         assertThat(fetchedOrder.getDeliveryCity()).isEqualTo("Testville");

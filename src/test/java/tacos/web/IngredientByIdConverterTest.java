@@ -18,8 +18,8 @@ class IngredientByIdConverterTest {
     @BeforeEach
     void setup() {
         IngredientRepository ingredientRepo = mock(IngredientRepository.class);
-        when(ingredientRepo.findOne("AAAA")).thenReturn(Optional.of(new Ingredient("AAAA", "TEST INGREDIENT", Ingredient.Type.CHEESE)));
-        when(ingredientRepo.findOne("ZZZZ")).thenReturn(Optional.empty());
+        when(ingredientRepo.findById("AAAA")).thenReturn(Optional.of(new Ingredient("AAAA", "TEST INGREDIENT", Ingredient.Type.CHEESE)));
+        when(ingredientRepo.findById("ZZZZ")).thenReturn(Optional.empty());
 
         this.converter = new IngredientByIdConverter(ingredientRepo);
     }
