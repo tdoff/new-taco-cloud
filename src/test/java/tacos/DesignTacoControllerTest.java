@@ -52,11 +52,11 @@ class DesignTacoControllerTest {
         when(ingredientRepo.findAll())
                 .thenReturn(ingredientMap.values().stream().flatMap(Collection::stream).collect(Collectors.toList()));
 
-        when(ingredientRepo.findOne("FLTO"))
+        when(ingredientRepo.findById("FLTO"))
                 .thenReturn(Optional.of(new Ingredient("FLTO", "Flour Tortilla", Type.WRAP)));
-        when(ingredientRepo.findOne("GRBF"))
+        when(ingredientRepo.findById("GRBF"))
                 .thenReturn(Optional.of(new Ingredient("GRBF", "Ground Beef", Type.PROTEIN)));
-        when(ingredientRepo.findOne("CHED"))
+        when(ingredientRepo.findById("CHED"))
                 .thenReturn(Optional.of(new Ingredient("CHED", "Cheddar", Type.CHEESE)));
 
         design = new Taco();
