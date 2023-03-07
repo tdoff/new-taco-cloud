@@ -1,6 +1,7 @@
-spring:
-  thymeleaf:
-    cache: false
-  datasource:
-    generate-unique-name: false
-    name: tacocloud
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core:
+            JdbcTemplate: debug
