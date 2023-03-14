@@ -15,8 +15,11 @@ import tacos.Ingredient;
 import tacos.Ingredient.Type;
 import tacos.Taco;
 import tacos.TacoOrder;
+import tacos.User;
 import tacos.data.IngredientRepository;
+import tacos.data.UserRepository;
 
+import java.security.Principal;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -28,6 +31,8 @@ import java.util.stream.StreamSupport;
 public class DesignTacoController {
 
     private IngredientRepository ingredientRepo;
+
+    private UserRepository userRepo;
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
@@ -45,6 +50,12 @@ public class DesignTacoController {
     @ModelAttribute(name = "taco")
     public Taco taco() {
         return new Taco();
+    }
+
+    @ModelAttribute(name = "user")
+    public User user(Principal principal) {
+        String username = principal.getName();
+        return userRepo.findByUsername(username);
     }
 
     @GetMapping

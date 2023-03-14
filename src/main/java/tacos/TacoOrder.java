@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -27,6 +29,8 @@ public class TacoOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Date placedAt;
+    @ManyToOne
+    private User user;
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
     @NotBlank(message = "Street is required")
@@ -49,5 +53,10 @@ public class TacoOrder implements Serializable {
 
     public void addTaco(Taco taco) {
         this.tacos.add(taco);
+    }
+
+    @PrePersist
+    public void placedAt() {
+        placedAt = new Date();
     }
 }
