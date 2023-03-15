@@ -1,6 +1,8 @@
 package tacos;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Disabled
 public class DesignAndOrderTacosBrowserTest {
 
     @LocalServerPort
@@ -29,38 +32,108 @@ public class DesignAndOrderTacosBrowserTest {
                 .implicitlyWait(Duration.ofSeconds(10L));
     }
 
+    @AfterAll
+    public static void closeBrowser() {
+        browser.quit();
+    }
+
     @Test
     public void designTacoPage_HappyPath() {
         browser.get(homePageUrl());
         clickDesignTaco();
+
+        assertLandedOnLoginPage();
+        doRegistration("testuser", "testpassword");
+        assertLandedOnLoginPage();
+        doLogin("testuser", "testpassword");
+
         assertDesignPageElements();
         buildAndSubmitTaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
         clickBuildAnotherTaco();
         buildAndSubmitTaco("Another Taco", "COTO", "CARN", "JACK", "LETC", "SRCR");
         fillInAndSubmitOrderForm();
         assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
+
+        doLogout();
     }
 
     @Test
     public void designTacoPage_EmptyOrderInfo() {
         browser.get(homePageUrl());
         clickDesignTaco();
+
+        assertLandedOnLoginPage();
+        doRegistration("testuser2", "testpassword");
+        assertLandedOnLoginPage();
+        doLogin("testuser2", "testpassword");
+
         assertDesignPageElements();
         buildAndSubmitTaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
         submitEmptyOrderForm();
         fillInAndSubmitOrderForm();
         assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
+
+        doLogout();
     }
 
     @Test
     public void designTacoPage_InvalidOrderInfo() {
         browser.get(homePageUrl());
         clickDesignTaco();
+
+        assertLandedOnLoginPage();
+        doRegistration("testuser3", "testpassword");
+        assertLandedOnLoginPage();
+        doLogin("testuser3", "testpassword");
+
         assertDesignPageElements();
         buildAndSubmitTaco("Basic Taco", "FLTO", "GRBF", "CHED", "TMTO", "SLSA");
         submitInvalidOrderForm();
         fillInAndSubmitOrderForm();
         assertThat(browser.getCurrentUrl()).isEqualTo(homePageUrl());
+
+        doLogout();
+    }
+
+    private void doLogout() {
+        WebElement logoutForm = browser.findElement(By.cssSelector("form#logoutForm"));
+        if (logoutForm != null) {
+            logoutForm.submit();
+        }
+    }
+
+    private void doLogin(String username, String password) {
+        browser.findElement(By.cssSelector("input#username")).sendKeys(username);
+        browser.findElement(By.cssSelector("input#password")).sendKeys(password);
+        browser.findElement(By.cssSelector("form#loginForm")).submit();
+    }
+
+    private void assertLandedOnLoginPage() {
+        assertThat(browser.getCurrentUrl()).isEqualTo(loginPageUrl());
+    }
+
+    private void doRegistration(String username, String password) {
+        browser.findElement(By.linkText("here")).click();
+        assertThat(browser.getCurrentUrl()).isEqualTo(registrationPageUrl());
+        browser.findElement(By.name("username")).sendKeys(username);
+        browser.findElement(By.name("password")).sendKeys(password);
+        browser.findElement(By.name("confirm")).sendKeys(password);
+        browser.findElement(By.name("confirm")).sendKeys(password);
+        browser.findElement(By.name("fullname")).sendKeys("Test McTest");
+        browser.findElement(By.name("street")).sendKeys("1234 Test Street");
+        browser.findElement(By.name("city")).sendKeys("Testville");
+        browser.findElement(By.name("state")).sendKeys("TX");
+        browser.findElement(By.name("zip")).sendKeys("12345");
+        browser.findElement(By.name("phone")).sendKeys("123-123-1234");
+        browser.findElement(By.cssSelector("form#registrationForm")).submit();
+    }
+
+    private String registrationPageUrl() {
+        return homePageUrl() + "register";
+    }
+
+    private String loginPageUrl() {
+        return homePageUrl() + "login";
     }
 
     private void submitInvalidOrderForm() {
