@@ -1,4 +1,7 @@
 spring:
+  data:
+    rest:
+      base-path: /data-api
   security:
     user:
       name: buzz
