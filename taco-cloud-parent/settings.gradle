@@ -1,0 +1,9 @@
+rootProject.name = 'taco-cloud-parent'
+include 'taco-cloud'
+include 'tacocloud-api'
+include 'tacocloud-data'
+include 'tacocloud-domain'
+include 'tacocloud-security'
+include 'tacocloud-restclient'
+include 'tacocloud-web'
+
