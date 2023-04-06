@@ -1,0 +1,30 @@
+spring:
+  data:
+    rest:
+      base-path: /data-api
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http:/ /localhost:9000/oauth2/jwks
+    user:
+      name: buzz
+      password: infinity
+  thymeleaf:
+    cache: false
+  datasource:
+    generate-unique-name: false
+    name: tacocloud
+server:
+  port: 8443
+  ssl:
+    key-store: C:\Users\temir\mykeys.jks
+    key-store-password: letmein
+    key-password: letmein
+
+taco:
+  orders:
+    pageSize: 10
+  discount:
+    codes:
+      abcdef: 10
